@@ -1,0 +1,1 @@
+/home/nnavi/Documents/school/asso/rezel/qrcode/target/debug/examples/test_01: /home/nnavi/Documents/school/asso/rezel/qrcode/examples/test_01.rs /home/nnavi/Documents/school/asso/rezel/qrcode/src/lib.rs

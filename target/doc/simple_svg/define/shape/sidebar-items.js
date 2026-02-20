@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Shape"],"mod":["arrow","circle","ellipse","filter","gradient","line","marker","path","polygon","polyline","rect","text"]};

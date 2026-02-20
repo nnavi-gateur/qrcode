@@ -1,0 +1,301 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Group: group shapes or other groups, reuse it. Group is a reusable set."><title>simple_svg::define::group - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="simple_svg" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../static.files/storage-e2aeef58.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Module group</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../../simple_svg/index.html">simple_<wbr>svg</a><span class="version">0.1.3</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module group</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#group-group-shapes-or-other-groups-reuse-it-group-is-a-reusable-set" title="Group: group shapes or other groups, reuse it. Group is a reusable set.">Group: group shapes or other groups, reuse it. Group is a reusable set.</a><ul><li><a href="#group-showcase-create-a-flare-group-reuse-it" title="Group showcase: create a flare group, reuse it.">Group showcase: create a flare group, reuse it.</a></li><li><a href="#group-showcase-create-a-pattern-reuse-it" title="Group showcase: create a pattern, reuse it.">Group showcase: create a pattern, reuse it.</a></li><li><a href="#group-showcase-create-a-five-circle-group-reuse-it-four-times" title="Group showcase: create a five circle group, reuse it four times.">Group showcase: create a five circle group, reuse it four times.</a></li></ul></li></ul><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In simple_<wbr>svg::<wbr>define</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../index.html">simple_svg</a>::<wbr><a href="../index.html">define</a></div><h1>Module <span>group</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../src/simple_svg/define/group.rs.html#1-57">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h4 id="group-group-shapes-or-other-groups-reuse-it-group-is-a-reusable-set"><a class="doc-anchor" href="#group-group-shapes-or-other-groups-reuse-it-group-is-a-reusable-set">§</a>Group: group shapes or other groups, reuse it. Group is a reusable set.</h4>
+<p>Create: Group::new()</p>
+<p>Place shape or group in it: group.place_widget(shape_id:…, style:…, at:…, ..Default::default())</p>
+<h5 id="group-showcase-create-a-flare-group-reuse-it"><a class="doc-anchor" href="#group-showcase-create-a-flare-group-reuse-it">§</a>Group showcase: create a flare group, reuse it.</h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>simple_svg::<span class="kw-2">*</span>;
+
+<span class="kw">let </span><span class="kw-2">mut </span>svg = Svg::new(<span class="number">220.0</span>, <span class="number">280.0</span>);
+
+<span class="kw">let </span>line1_id = svg.add_shape(Shape::Line(Line::new((<span class="number">0.0</span>, <span class="number">0.0</span>), (<span class="number">30.0</span>, <span class="number">30.0</span>))));
+<span class="kw">let </span>line2_id = svg.add_shape(Shape::Line(Line::new((<span class="number">0.0</span>, <span class="number">15.0</span>), (<span class="number">30.0</span>, <span class="number">15.0</span>))));
+<span class="kw">let </span>line3_id = svg.add_shape(Shape::Line(Line::new((<span class="number">15.0</span>, <span class="number">0.0</span>), (<span class="number">15.0</span>, <span class="number">30.0</span>))));
+<span class="kw">let </span>line4_id = svg.add_shape(Shape::Line(Line::new((<span class="number">30.0</span>, <span class="number">0.0</span>), (<span class="number">0.0</span>, <span class="number">30.0</span>))));
+
+<span class="kw">let </span><span class="kw-2">mut </span>line_sstyle = Sstyle::new();
+line_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"#765373"</span>.to_string());
+line_sstyle.stroke_width = <span class="prelude-val">Some</span>(<span class="number">5.0</span>);
+
+<span class="kw">let </span><span class="kw-2">mut </span>group = Group::new();
+
+group.place_widget(Widget {
+    shape_id: line1_id,
+    style: <span class="prelude-val">Some</span>(line_sstyle.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">5.0</span>, <span class="number">5.0</span>)),
+    ..Default::default()
+});
+
+group.place_widget(Widget {
+    shape_id: line2_id,
+    style: <span class="prelude-val">Some</span>(line_sstyle.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">5.0</span>, <span class="number">5.0</span>)),
+    ..Default::default()
+});
+
+group.place_widget(Widget {
+    shape_id: line3_id,
+    style: <span class="prelude-val">Some</span>(line_sstyle.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">5.0</span>, <span class="number">5.0</span>)),
+    ..Default::default()
+});
+
+group.place_widget(Widget {
+    shape_id: line4_id,
+    style: <span class="prelude-val">Some</span>(line_sstyle.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">5.0</span>, <span class="number">5.0</span>)),
+    ..Default::default()
+});
+
+<span class="kw">let </span>group_id = svg.add_group(group);
+
+<span class="kw">let </span><span class="kw-2">mut </span>default_group = Group::new();
+
+default_group.place_widget(Widget {
+    shape_id: group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">50.0</span>, <span class="number">50.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">100.0</span>, <span class="number">100.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">80.0</span>, <span class="number">200.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">150.0</span>, <span class="number">100.0</span>)),
+    ..Default::default()
+});
+
+svg.add_default_group(default_group);
+
+<span class="kw">let </span>svg_str = svg_out(svg);
+
+<span class="kw">let </span>contents = <span class="macro">include_str!</span>(<span class="string">"../../showcase/group/group1.svg"</span>);
+
+<span class="macro">assert_eq!</span>(svg_str, contents);</code></pre></div>
+<p><img src="../../../../../showcase/group/group1.svg" alt="" /></p>
+<h5 id="group-showcase-create-a-pattern-reuse-it"><a class="doc-anchor" href="#group-showcase-create-a-pattern-reuse-it">§</a>Group showcase: create a pattern, reuse it.</h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>simple_svg::<span class="kw-2">*</span>;
+
+<span class="kw">let </span><span class="kw-2">mut </span>svg = Svg::new(<span class="number">100.0</span>, <span class="number">100.0</span>);
+
+<span class="kw">let </span>rect_id = svg.add_shape(Shape::Rect(Rect::new(<span class="number">50.0</span>, <span class="number">50.0</span>)));
+
+<span class="kw">let </span>line1_id = svg.add_shape(Shape::Line(Line::new((<span class="number">10.0</span>, <span class="number">0.0</span>), (<span class="number">0.0</span>, <span class="number">50.0</span>))));
+<span class="kw">let </span>line2_id = svg.add_shape(Shape::Line(Line::new((<span class="number">0.0</span>, <span class="number">0.0</span>), (<span class="number">10.0</span>, <span class="number">50.0</span>))));
+
+<span class="kw">let </span><span class="kw-2">mut </span>line_sstyle = Sstyle::new();
+line_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"black"</span>.to_string());
+line_sstyle.stroke_width = <span class="prelude-val">Some</span>(<span class="number">1.0</span>);
+
+<span class="kw">let </span><span class="kw-2">mut </span>cross_line_group = Group::new();
+
+cross_line_group.place_widget(Widget {
+    shape_id: line1_id,
+    style: <span class="prelude-val">Some</span>(line_sstyle.clone()),
+    ..Default::default()
+});
+
+cross_line_group.place_widget(Widget {
+    shape_id: line2_id,
+    style: <span class="prelude-val">Some</span>(line_sstyle.clone()),
+    ..Default::default()
+});
+
+<span class="kw">let </span>cross_line_group_id = svg.add_group(cross_line_group);
+
+<span class="kw">let </span><span class="kw-2">mut </span>rect_sstyle = Sstyle::new();
+rect_sstyle.fill = <span class="prelude-val">Some</span>(<span class="string">"orange"</span>.to_string());
+rect_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"red"</span>.to_string());
+rect_sstyle.stroke_width = <span class="prelude-val">Some</span>(<span class="number">2.0</span>);
+
+<span class="kw">let </span><span class="kw-2">mut </span>pattern_group = Group::new();
+
+pattern_group.place_widget(Widget {
+    shape_id: rect_id,
+    style: <span class="prelude-val">Some</span>(rect_sstyle),
+    ..Default::default()
+});
+
+pattern_group.place_widget(Widget {
+    shape_id: cross_line_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">0.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+pattern_group.place_widget(Widget {
+    shape_id: cross_line_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">10.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+pattern_group.place_widget(Widget {
+    shape_id: cross_line_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">20.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+pattern_group.place_widget(Widget {
+    shape_id: cross_line_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">30.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+pattern_group.place_widget(Widget {
+    shape_id: cross_line_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">40.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+<span class="kw">let </span>pattern_group_id = svg.add_group(pattern_group);
+
+<span class="kw">let </span><span class="kw-2">mut </span>default_group = Group::new();
+
+default_group.place_widget(Widget {
+    shape_id: pattern_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">0.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: pattern_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">50.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: pattern_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">0.0</span>, <span class="number">50.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: pattern_group_id.clone(),
+    at: <span class="prelude-val">Some</span>((<span class="number">50.0</span>, <span class="number">50.0</span>)),
+    ..Default::default()
+});
+
+svg.add_default_group(default_group);
+
+<span class="kw">let </span>svg_str = svg_out(svg);
+
+<span class="kw">let </span>contents = <span class="macro">include_str!</span>(<span class="string">"../../showcase/group/group2.svg"</span>);
+
+<span class="macro">assert_eq!</span>(svg_str, contents);</code></pre></div>
+<p><img src="../../../../../showcase/group/group2.svg" alt="" /></p>
+<h5 id="group-showcase-create-a-five-circle-group-reuse-it-four-times"><a class="doc-anchor" href="#group-showcase-create-a-five-circle-group-reuse-it-four-times">§</a>Group showcase: create a five circle group, reuse it four times.</h5>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>simple_svg::<span class="kw-2">*</span>;
+
+<span class="kw">let </span><span class="kw-2">mut </span>svg = Svg::new(<span class="number">1000.0</span>, <span class="number">600.0</span>);
+
+<span class="kw">let </span>circle_id = svg.add_shape(Shape::Circle(Circle::new(<span class="number">60.0</span>)));
+
+<span class="kw">let </span><span class="kw-2">mut </span>circle1_sstyle = Sstyle::new();
+circle1_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"rgb(11, 112, 191)"</span>.to_string());
+
+<span class="kw">let </span><span class="kw-2">mut </span>circle2_sstyle = Sstyle::new();
+circle2_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"rgb(240, 183, 0)"</span>.to_string());
+
+<span class="kw">let </span><span class="kw-2">mut </span>circle3_sstyle = Sstyle::new();
+circle3_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"rgb(0, 0, 0)"</span>.to_string());
+
+<span class="kw">let </span><span class="kw-2">mut </span>circle4_sstyle = Sstyle::new();
+circle4_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"rgb(13, 146, 38)"</span>.to_string());
+
+<span class="kw">let </span><span class="kw-2">mut </span>circle5_sstyle = Sstyle::new();
+circle5_sstyle.stroke = <span class="prelude-val">Some</span>(<span class="string">"rgb(214, 0, 23)"</span>.to_string());
+
+<span class="kw">let </span><span class="kw-2">mut </span>five_circle_group = Group::new();
+
+five_circle_group.place_widget(Widget {
+    shape_id: circle_id.clone(),
+    style: <span class="prelude-val">Some</span>(circle1_sstyle),
+    at: <span class="prelude-val">Some</span>((<span class="number">120.0</span>, <span class="number">120.0</span>)),
+    ..Default::default()
+});
+
+five_circle_group.place_widget(Widget {
+    shape_id: circle_id.clone(),
+    style: <span class="prelude-val">Some</span>(circle2_sstyle),
+    at: <span class="prelude-val">Some</span>((<span class="number">180.0</span>, <span class="number">180.0</span>)),
+    ..Default::default()
+});
+
+five_circle_group.place_widget(Widget {
+    shape_id: circle_id.clone(),
+    style: <span class="prelude-val">Some</span>(circle3_sstyle),
+    at: <span class="prelude-val">Some</span>((<span class="number">260.0</span>, <span class="number">120.0</span>)),
+    ..Default::default()
+});
+
+five_circle_group.place_widget(Widget {
+    shape_id: circle_id.clone(),
+    style: <span class="prelude-val">Some</span>(circle4_sstyle),
+    at: <span class="prelude-val">Some</span>((<span class="number">320.0</span>, <span class="number">180.0</span>)),
+    ..Default::default()
+});
+
+five_circle_group.place_widget(Widget {
+    shape_id: circle_id.clone(),
+    style: <span class="prelude-val">Some</span>(circle5_sstyle),
+    at: <span class="prelude-val">Some</span>((<span class="number">400.0</span>, <span class="number">120.0</span>)),
+    ..Default::default()
+});
+
+<span class="kw">let </span>five_circle_group_id = svg.add_group(five_circle_group);
+
+<span class="kw">let </span><span class="kw-2">mut </span>default_group = Group::new();
+
+<span class="kw">let </span>filter_id = svg.add_shape(Shape::Filter(Filter::new()));
+
+<span class="kw">let </span><span class="kw-2">mut </span>group_sstyle = Sstyle::new();
+group_sstyle.stroke_width = <span class="prelude-val">Some</span>(<span class="number">12.0</span>);
+
+default_group.place_widget(Widget {
+    shape_id: five_circle_group_id.clone(),
+    style: <span class="prelude-val">Some</span>(group_sstyle.clone()),
+    filter_id: <span class="prelude-val">Some</span>(filter_id.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">0.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: five_circle_group_id.clone(),
+    style: <span class="prelude-val">Some</span>(group_sstyle.clone()),
+    filter_id: <span class="prelude-val">Some</span>(filter_id.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">0.0</span>, <span class="number">300.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: five_circle_group_id.clone(),
+    style: <span class="prelude-val">Some</span>(group_sstyle.clone()),
+    filter_id: <span class="prelude-val">Some</span>(filter_id.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">500.0</span>, <span class="number">0.0</span>)),
+    ..Default::default()
+});
+
+default_group.place_widget(Widget {
+    shape_id: five_circle_group_id.clone(),
+    style: <span class="prelude-val">Some</span>(group_sstyle.clone()),
+    filter_id: <span class="prelude-val">Some</span>(filter_id.clone()),
+    at: <span class="prelude-val">Some</span>((<span class="number">500.0</span>, <span class="number">300.0</span>)),
+    ..Default::default()
+});
+
+svg.add_default_group(default_group);
+
+<span class="kw">let </span>svg_str = svg_out(svg);
+
+<span class="kw">let </span>contents = <span class="macro">include_str!</span>(<span class="string">"../../showcase/group/group3.svg"</span>);
+
+<span class="macro">assert_eq!</span>(svg_str, contents);</code></pre></div>
+<p><img src="../../../../../showcase/group/group3.svg" alt="" /></p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.Group.html" title="struct simple_svg::define::group::Group">Group</a></dt><dd>Group contains a widget list.</dd></dl></section></div></main></body></html>

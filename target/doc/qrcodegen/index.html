@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Generates QR Codes from text strings and byte arrays."><title>qrcodegen - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="qrcodegen" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate qrcodegen</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../qrcodegen/index.html">qrcodegen</a><span class="version">1.8.0</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#features" title="Features">Features</a></li><li><a href="#examples" title="Examples">Examples</a></li></ul><h3><a href="#structs">Crate Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>qrcodegen</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/qrcodegen/lib.rs.html#25-1284">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Generates QR Codes from text strings and byte arrays.</p>
+<p>This project aims to be the best, clearest QR Code generator library.
+The primary goals are flexible options and absolute correctness.
+Secondary goals are compact implementation size and good documentation comments.</p>
+<p>Home page with live JavaScript demo, extensive descriptions, and competitor comparisons:
+<a href="https://www.nayuki.io/page/qr-code-generator-library">https://www.nayuki.io/page/qr-code-generator-library</a></p>
+<h2 id="features"><a class="doc-anchor" href="#features">§</a>Features</h2>
+<p>Core features:</p>
+<ul>
+<li>Significantly shorter code but more documentation comments compared to competing libraries</li>
+<li>Supports encoding all 40 versions (sizes) and all 4 error correction levels, as per the QR Code Model 2 standard</li>
+<li>Output format: Raw modules/pixels of the QR symbol</li>
+<li>Detects finder-like penalty patterns more accurately than other implementations</li>
+<li>Encodes numeric and special-alphanumeric text in less space than general text</li>
+<li>Open-source code under the permissive MIT License</li>
+</ul>
+<p>Manual parameters:</p>
+<ul>
+<li>User can specify minimum and maximum version numbers allowed, then library will automatically choose smallest version in the range that fits the data</li>
+<li>User can specify mask pattern manually, otherwise library will automatically evaluate all 8 masks and select the optimal one</li>
+<li>User can specify absolute error correction level, or allow the library to boost it if it doesn’t increase the version number</li>
+<li>User can create a list of data segments manually and add ECI segments</li>
+</ul>
+<p>More information about QR Code technology and this library’s design can be found on the project home page.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">extern crate </span>qrcodegen;
+<span class="kw">use </span>qrcodegen::Mask;
+<span class="kw">use </span>qrcodegen::QrCode;
+<span class="kw">use </span>qrcodegen::QrCodeEcc;
+<span class="kw">use </span>qrcodegen::QrSegment;
+<span class="kw">use </span>qrcodegen::Version;</code></pre></div>
+<p>Simple operation:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>qr = QrCode::encode_text(<span class="string">"Hello, world!"</span>,
+    QrCodeEcc::Medium).unwrap();
+<span class="kw">let </span>svg = to_svg_string(<span class="kw-2">&amp;</span>qr, <span class="number">4</span>);  <span class="comment">// See qrcodegen-demo</span></code></pre></div>
+<p>Manual operation:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>text: <span class="kw-2">&amp;</span>str = <span class="string">"3141592653589793238462643383"</span>;
+<span class="kw">let </span>segs = QrSegment::make_segments(text);
+<span class="kw">let </span>qr = QrCode::encode_segments_advanced(<span class="kw-2">&amp;</span>segs, QrCodeEcc::High,
+    Version::new(<span class="number">5</span>), Version::new(<span class="number">5</span>), <span class="prelude-val">Some</span>(Mask::new(<span class="number">2</span>)), <span class="bool-val">false</span>).unwrap();
+<span class="kw">for </span>y <span class="kw">in </span><span class="number">0 </span>.. qr.size() {
+    <span class="kw">for </span>x <span class="kw">in </span><span class="number">0 </span>.. qr.size() {
+        (... paint qr.get_module(x, y) ...)
+    }
+}</code></pre></div></div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.BitBuffer.html" title="struct qrcodegen::BitBuffer">BitBuffer</a></dt><dd>An appendable sequence of bits (0s and 1s).</dd><dt><a class="struct" href="struct.Mask.html" title="struct qrcodegen::Mask">Mask</a></dt><dd>A number between 0 and 7 (inclusive).</dd><dt><a class="struct" href="struct.QrCode.html" title="struct qrcodegen::QrCode">QrCode</a></dt><dd>A QR Code symbol, which is a type of two-dimension barcode.</dd><dt><a class="struct" href="struct.QrSegment.html" title="struct qrcodegen::QrSegment">QrSegment</a></dt><dd>A segment of character/binary/control data in a QR Code symbol.</dd><dt><a class="struct" href="struct.Version.html" title="struct qrcodegen::Version">Version</a></dt><dd>A number between 1 and 40 (inclusive).</dd></dl><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><dl class="item-table"><dt><a class="enum" href="enum.DataTooLong.html" title="enum qrcodegen::DataTooLong">Data<wbr>TooLong</a></dt><dd>The error type when the supplied data does not fit any QR Code version.</dd><dt><a class="enum" href="enum.QrCodeEcc.html" title="enum qrcodegen::QrCodeEcc">QrCode<wbr>Ecc</a></dt><dd>The error correction level in a QR Code symbol.</dd><dt><a class="enum" href="enum.QrSegmentMode.html" title="enum qrcodegen::QrSegmentMode">QrSegment<wbr>Mode</a></dt><dd>Describes how a segment’s data bits are interpreted.</dd></dl></section></div></main></body></html>

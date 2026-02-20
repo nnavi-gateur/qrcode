@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TextDecoration","TextKerning","TextSpace"],"struct":["Text"]};

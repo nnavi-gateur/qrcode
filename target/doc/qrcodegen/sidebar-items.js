@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DataTooLong","QrCodeEcc","QrSegmentMode"],"struct":["BitBuffer","Mask","QrCode","QrSegment","Version"]};

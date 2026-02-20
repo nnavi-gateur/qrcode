@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FillRule","LineCap","LineJoin"],"struct":["Sstyle"]};
