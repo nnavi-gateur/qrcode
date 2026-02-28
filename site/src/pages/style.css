@@ -17,14 +17,18 @@ body {
     z-index: 100;
 }
 
-
+#rezel{
+    height: 60px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
 
 #main{
     color : white;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 8000px;
+    margin-top: 200px;
 }
 
 #qr-form{
