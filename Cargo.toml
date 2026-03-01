@@ -9,7 +9,13 @@ readme = "Readme.markdown"
 keywords = ["qr-code", "barcode", "encoder", "image"]
 categories = ["encoding", "multimedia::images"]
 license = "MIT"
+edition = "2021"
 exclude = ["examples/*"]
+
+
 
 [dependencies]
 simple_svg = "0.1.3"
+rocket = { version = "0.5.0", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+rocket_cors = "0.6.0"
