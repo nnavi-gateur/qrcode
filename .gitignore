@@ -1,2 +1,17 @@
+# Rust build artifacts
 target/
 Cargo.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Output files
+output.svg
+output.jpg
+output*.txt
