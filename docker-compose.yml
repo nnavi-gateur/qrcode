@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./site
+      dockerfile: Dockerfile
+      args:
+        # Replace with the public IP / domain of your VM so the browser can
+        # reach the backend.  Example: http://192.168.1.42:8000
+        PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    depends_on:
+      - backend

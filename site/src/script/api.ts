@@ -1,28 +1,47 @@
-async function getData() {
-  const response = await fetch("http://localhost:8000/hello");
-  const data = await response.json();
-  return data;
+
+
+const answer = document.getElementById("answer") as HTMLImageElement;
+const downloadLink = document.getElementById("download-link") as HTMLAnchorElement;
+const submit = document.getElementById("submit") as HTMLButtonElement;
+
+
+let security =document.getElementById('security-level') as HTMLSelectElement;
+if (security){
+  security.selectedIndex = 0;
 }
 
-// Attendre que le DOM soit chargé avant d'accéder aux éléments
-if (typeof document !== 'undefined') {
-  const answer = document.getElementById("answer") as HTMLImageElement;
-  const submit = document.getElementById("submit") as HTMLButtonElement;
+if (submit && answer) {
+  submit.addEventListener("click", async function() {
+    try {
+      const content = (document.getElementById("qr-input") as HTMLInputElement).value;
+      const encodedContent = encodeURIComponent(content);  // Add this
+      const format = (document.getElementById("format") as HTMLSelectElement).value;
+      let security =document.getElementById('security-level') as HTMLSelectElement;
 
+      let data:any;
+      const apiBase = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8000";
+      if (format === "jpg") {
+        const reponse = await fetch(`${apiBase}/qrcode/JPG/${encodedContent}/${security.selectedIndex}`);
+        data= await reponse.json();
+        answer.src = "data:image/jpeg;base64," + data.message;
+        downloadLink.href = "data:image/jpeg;base64," + data.message;
+        downloadLink.style.display = "block";
+      }
+      else{
+        const reponse = await fetch(`${apiBase}/qrcode/SVG/${encodedContent}/${security.selectedIndex}`);
 
-  if (submit && answer) {
-    submit.addEventListener("click", async function() {
-      try {
-        const response = await fetch("http://localhost:8000/qrcode");
-
-        const data= await response.json();
-
+        data= await reponse.json();
         answer.src = "data:image/svg+xml;base64," + btoa(data.message);
+        downloadLink.href = "data:image/svg+xml;base64," + btoa(data.message);
+        downloadLink.style.display = "block";
+        
+      }
 
-    } catch (err) {
-    console.error("Erreur complète:", err);
-    answer.textContent = "Erreur";
-  }
-    }
-    );
-}}  
+        } catch (err) {
+          console.error("Erreur complète:", err);
+          answer.textContent = "Erreur";
+          }
+   } );
+}
+
+

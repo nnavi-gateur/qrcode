@@ -10,16 +10,25 @@ struct Response {
     message: String,
 }
 
-#[get("/qrcode")]
-fn hello() -> Json<Response> {
+#[get("/qrcode/SVG/<content>/<level>")]
+fn qr_svg(content: String, level: i32) -> Json<Response> {
+    println!("Received request for content: {}, level: {}", content, level);
     Json(Response {
-        message: create_svg(&create_qr_code("Hello World", 2)).to_string(),
+        message: create_svg(&create_qr_code(&content, level)).to_string(),
     })
 }
+#[get("/qrcode/JPG/<content>/<level>")]
+fn qr_jpg(content: String, level: i32) -> Json<Response> {
+    println!("Received request for content: {}, level: {}", content, level);
+    Json(Response {
+        message: create_jpg(&create_qr_code(&content, level)).to_string(),
+    })
+}
+
 
 #[launch]
 fn rocket() -> _ {
     let cors = CorsOptions::default().to_cors().expect("CORS error");
 
-    rocket::build().attach(cors).mount("/", routes![hello])
+    rocket::build().attach(cors).mount("/", routes![qr_svg, qr_jpg])
 }
