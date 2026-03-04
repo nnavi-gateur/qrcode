@@ -21,16 +21,16 @@ if (submit && answer) {
       let data:any;
       const apiBase = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8000";
       if (format === "jpg") {
-        const reponse = await fetch(`${apiBase}/qrcode/JPG/${encodedContent}/${security.selectedIndex}`);
-        data= await reponse.json();
+        const response = await fetch(`${apiBase}/qrcode/JPG/${encodedContent}/${security.selectedIndex}`);
+        data= await response.json();
         answer.src = "data:image/jpeg;base64," + data.message;
         downloadLink.href = "data:image/jpeg;base64," + data.message;
         downloadLink.style.display = "block";
       }
       else{
-        const reponse = await fetch(`${apiBase}/qrcode/SVG/${encodedContent}/${security.selectedIndex}`);
+        const response = await fetch(`${apiBase}/qrcode/SVG/${encodedContent}/${security.selectedIndex}`);
 
-        data= await reponse.json();
+        data= await response.json();
         answer.src = "data:image/svg+xml;base64," + btoa(data.message);
         downloadLink.href = "data:image/svg+xml;base64," + btoa(data.message);
         downloadLink.style.display = "block";
