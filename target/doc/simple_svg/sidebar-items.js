@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["svg_out"],"mod":["define","gadget"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"static":["BACKGROUND_GROUP_ID","DEFAULT_GROUP_ID"],"struct":["Svg"]};

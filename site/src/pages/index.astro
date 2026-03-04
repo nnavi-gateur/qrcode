@@ -1,6 +1,7 @@
 ---
 import '../pages/style.css';
 import rezel_logo from '../assets/rezel_blanc.svg';
+
 ---
 
 <!DOCTYPE html>
@@ -9,13 +10,34 @@ import rezel_logo from '../assets/rezel_blanc.svg';
 <head>
         <title>QR Code Generator</title>
 </head>
+
 <body>  
         <p id="page-header"><img id="rezel" src={rezel_logo.src}  /> rezel code generator</p>
         <h1 id = "main">QR Code Generator</h1>
-        <form action="/generate" method="post" id ="qr-form">
-                <input type="text" name="data" placeholder="Enter data for QR code" required>
-                <button type="submit">Generate QR Code</button>
-        </form>
+        <div class="box">
+        <input id="qr-input" type="text" name="data" placeholder="Enter data for QR code" required>
+        <select id="format">
+                <option value="jpg">JPG</option>
+                <option value="svg">SVG</option>
+      </select>
+      <select id="security-level">
+                <option disabled selected>Security Level</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="quartile">Quartile</option>
+                <option value="high">High</option>
+      </select>
+        <button id="submit" >Generate QR Code</button>
+      </div>
+      <div class ="box">
+         <a id = "download-link" download style="display: none;"> Download QR Code</a>
+        <img id = "answer"> </img>
+        </div>  
 </body>
+
+
+<script>
+  import '../script/api.ts';
+</script>
 </html>
 

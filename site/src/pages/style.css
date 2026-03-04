@@ -1,5 +1,9 @@
 body {
     background-color: rgb(46, 49, 94);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
 
 #page-header {
@@ -25,10 +29,10 @@ body {
 
 #main{
     color : white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 200px;
+    width: 100%;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 20px;
 }
 
 #qr-form{
@@ -37,3 +41,18 @@ body {
     align-items: center;
     gap: 10px;
 }   
+
+.box{
+    padding-top: 10px;
+    border-radius: 25px;
+    width: 45%;
+    height : 400px;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    background: white;
+    
+}
