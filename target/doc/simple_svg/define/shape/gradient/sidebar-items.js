@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["GradientUnits","SpreadMethod"],"struct":["LinearGradient","RadialGradient"]};
