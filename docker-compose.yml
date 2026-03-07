@@ -1,9 +1,8 @@
 services:
-  # ── Optional URL shortener ────────────────────────────────────────────────────
-  # Activate with:  docker compose --profile shortener up
-  # Requires the ./rs-short source directory (tracked separately).
   rs-short:
-    profiles: [shortener]
+    # Pre-built image published to GHCR on every push to main.
+    # Use `docker compose up --build` to build locally instead.
+    image: ghcr.io/nnavi-gateur/qrcode-rs-short:latest
     build:
       context: ./rs-short
       dockerfile: Dockerfile
@@ -31,8 +30,9 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
+    depends_on:
+      - rs-short
     environment:
-      # Point to rs-short when the shortener profile is active.
       RS_SHORT_URL: ${RS_SHORT_URL:-http://rs-short:8080}
 
   frontend:

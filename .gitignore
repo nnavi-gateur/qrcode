@@ -16,8 +16,8 @@ output.svg
 output.jpg
 output*.txt
 
-# rs-short subproject (tracked separately)
-rs-short/
+# Exclude rs-short build artifacts only — source is tracked
+rs-short/target/
 
 # Local environment overrides — never commit secrets
 .env

@@ -20,7 +20,7 @@ The project is composed of three services:
 
 ### Deploy on a VM (copy-to-server)
 
-The backend and frontend images are published to the GitHub Container Registry on every push to `main`, so you **do not need the source code** on your server.
+All three images (backend, frontend, rs-short) are published to the GitHub Container Registry on every push to `main`, so you **do not need the source code** on your server.
 
 1. Copy `docker-compose.yml` and `.env.example` to your VM.
 
@@ -34,19 +34,13 @@ The backend and frontend images are published to the GitHub Container Registry o
    nano .env
    ```
 
-3. Pull the pre-built images and start the services:
+3. Pull the pre-built images and start all services:
 
    ```bash
    docker compose up -d
    ```
 
 4. Open `http://<your-vm-ip>` in your browser.
-
-> **URL shortening** is optional. To enable it, make sure the `rs-short`
-> source directory is present (tracked separately) and run:
-> ```bash
-> docker compose --profile shortener up -d
-> ```
 
 ### Quick start (local / development)
 

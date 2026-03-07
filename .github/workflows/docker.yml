@@ -10,6 +10,7 @@ env:
   REGISTRY: ghcr.io
   BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/qrcode-backend
   FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/qrcode-frontend
+  RS_SHORT_IMAGE: ghcr.io/${{ github.repository_owner }}/qrcode-rs-short
 
 jobs:
   build-and-push:
@@ -28,6 +29,25 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for rs-short
+        id: meta-rs-short
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.RS_SHORT_IMAGE }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and push rs-short image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./rs-short
+          file: ./rs-short/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta-rs-short.outputs.tags }}
+          labels: ${{ steps.meta-rs-short.outputs.labels }}
 
       - name: Extract metadata for backend
         id: meta-backend
