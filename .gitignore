@@ -1,7 +1,5 @@
 # Rust build artifacts
-!rs-short/
 target/
-rs-short/target/
 Cargo.lock
 
 # IDE and editor files
@@ -18,3 +16,8 @@ output.svg
 output.jpg
 output*.txt
 
+# Include rs-short folder and all its contents
+!rs-short/
+!rs-short/**
+# But exclude rs-short/target
+rs-short/target/
