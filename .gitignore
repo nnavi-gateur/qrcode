@@ -18,3 +18,6 @@ output*.txt
 
 # rs-short subproject (tracked separately)
 rs-short/
+
+# Local environment overrides — never commit secrets
+.env

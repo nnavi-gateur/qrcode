@@ -18,12 +18,42 @@ The project is composed of three services:
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 
-### Quick start (recommended)
+### Deploy on a VM (copy-to-server)
+
+The backend and frontend images are published to the GitHub Container Registry on every push to `main`, so you **do not need the source code** on your server.
+
+1. Copy `docker-compose.yml` and `.env.example` to your VM.
+
+2. Create your environment file and set the public IP or domain of the VM:
+
+   ```bash
+   cp .env.example .env
+   # Edit PUBLIC_API_URL to point to your VM's IP / domain.
+   # Example:
+   #   PUBLIC_API_URL=http://203.0.113.10:8000
+   nano .env
+   ```
+
+3. Pull the pre-built images and start the services:
+
+   ```bash
+   docker compose up -d
+   ```
+
+4. Open `http://<your-vm-ip>` in your browser.
+
+> **URL shortening** is optional. To enable it, make sure the `rs-short`
+> source directory is present (tracked separately) and run:
+> ```bash
+> docker compose --profile shortener up -d
+> ```
+
+### Quick start (local / development)
 
 ```bash
 git clone <repo-url>
 cd qrcode
-docker-compose up --build
+docker compose up --build
 ```
 
 Then open `http://localhost` in your browser.
