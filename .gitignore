@@ -1,5 +1,7 @@
 # Rust build artifacts
+!rs-short/
 target/
+rs-short/target/
 Cargo.lock
 
 # IDE and editor files
