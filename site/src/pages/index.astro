@@ -12,14 +12,13 @@ import rezel_logo from '../assets/rezel_blanc.svg';
 </head>
 
 <body>  
-        <p id="page-header"><img id="rezel" src={rezel_logo.src}  /> rezel code generator</p>
-        <h1 id = "main">QR Code Generator</h1>
-        <div class="box">
+        <h1 id = "main"><img id="rezel" src={rezel_logo.src}  /> QR Code Generator</h1>
+        <div class="box" id="qr-form">
         <input id="qr-input" type="text" name="data" placeholder="Enter data for QR code" required>
-        <select id="format">
-                <option value="jpg">JPG</option>
-                <option value="svg">SVG</option>
-      </select>
+        <div id="format-buttons">
+          <button id="format-jpg" class="format-btn active">JPG</button>
+          <button id="format-svg" class="format-btn">SVG</button>
+        </div>
       <select id="security-level">
                 <option disabled selected>Security Level</option>
                 <option value="low">Low</option>
@@ -27,11 +26,19 @@ import rezel_logo from '../assets/rezel_blanc.svg';
                 <option value="quartile">Quartile</option>
                 <option value="high">High</option>
       </select>
-        <button id="submit" >Generate QR Code</button>
+      <div id="shorten-container">
+        <input id="shorten-checkbox" type="checkbox" checked = "true"/>
+        <label for="shorten-checkbox"></label>
+        <span>Shorten URL</span>
       </div>
-      <div class ="box">
-         <a id = "download-link" download style="display: none;"> Download QR Code</a>
+        <button id="submit" >Create!</button>
+      <p id="sec-select" style="display:none;"> Select a security level before generating the QR code. </p>
+      </div>
+      <div class ="box" id ="answer-box">
+
         <img id = "answer"> </img>
+         <a id = "download-link" download tabindex="0" style="display: none;"> Download QR Code</a>
+
         </div>  
 </body>
 

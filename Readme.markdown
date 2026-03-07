@@ -1,64 +1,130 @@
-QR Code generator library - Rust
-================================
+# QR Code Generator — Rezel
 
+A full-stack web application for generating QR codes from text or URLs, with optional URL shortening. Built for [Rezel](https://rezel.net).
 
-Introduction
-------------
+## Architecture
 
-This project aims to be the best, clearest QR Code generator library. The primary goals are flexible options and absolute correctness. Secondary goals are compact implementation size and good documentation comments.
+The project is composed of three services:
 
-Home page with live JavaScript demo, extensive descriptions, and competitor comparisons: https://www.nayuki.io/page/qr-code-generator-library
+| Service | Technology | Port | Role |
+|---------|-----------|------|------|
+| **Backend** | Rust / Rocket | 8000 | HTTP API — generates QR codes, proxies URL shortening |
+| **Frontend** | Astro / nginx | 80 | Single-page web UI |
+| **URL Shortener** | Rust / Actix-web (`rs-short`) | 8080 | Shortens URLs before encoding |
 
+## Setup
 
-Features
---------
+### Prerequisites
 
-Core features:
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
 
-* Significantly shorter code but more documentation comments compared to competing libraries
-* Supports encoding all 40 versions (sizes) and all 4 error correction levels, as per the QR Code Model 2 standard
-* Output format: Raw modules/pixels of the QR symbol
-* Detects finder-like penalty patterns more accurately than other implementations
-* Encodes numeric and special-alphanumeric text in less space than general text
-* Open-source code under the permissive MIT License
+### Quick start (recommended)
 
-Manual parameters:
-
-* User can specify minimum and maximum version numbers allowed, then library will automatically choose smallest version in the range that fits the data
-* User can specify mask pattern manually, otherwise library will automatically evaluate all 8 masks and select the optimal one
-* User can specify absolute error correction level, or allow the library to boost it if it doesn't increase the version number
-* User can create a list of data segments manually and add ECI segments
-
-More information about QR Code technology and this library's design can be found on the project home page.
-
-
-Examples
---------
-
-```rust
-extern crate qrcodegen;
-use qrcodegen::Mask;
-use qrcodegen::QrCode;
-use qrcodegen::QrCodeEcc;
-use qrcodegen::QrSegment;
-use qrcodegen::Version;
-
-// Simple operation
-let qr = QrCode::encode_text("Hello, world!",
-    QrCodeEcc::Medium).unwrap();
-let svg = to_svg_string(&qr, 4);  // See qrcodegen-demo
-
-// Manual operation
-let text: &str = "3141592653589793238462643383";
-let segs = QrSegment::make_segments(text);
-let qr = QrCode::encode_segments_advanced(&segs,
-    QrCodeEcc::High, Version::new(5), Version::new(5),
-    Some(Mask::new(2)), false).unwrap();
-for y in 0 .. qr.size() {
-    for x in 0 .. qr.size() {
-        (... paint qr.get_module(x, y) ...)
-    }
-}
+```bash
+git clone <repo-url>
+cd qrcode
+docker-compose up --build
 ```
 
-More complete set of examples: https://github.com/nayuki/QR-Code-generator/blob/master/rust/examples/qrcodegen-demo.rs .
+Then open `http://localhost` in your browser.
+
+### Without Docker
+
+**Backend** — requires Rust stable (`rustup`), `pkg-config`, `libssl-dev`:
+
+```bash
+cargo build --release
+./target/release/qrcodegen
+```
+
+**Frontend** — requires Node.js 20+:
+
+```bash
+cd site
+npm install
+npm run dev      # development server with hot reload
+# or
+npm run build    # production static build
+npm run preview  # preview the production build
+```
+
+**URL shortener** — see `rs-short/` and configure `rs-short/config.toml` (copy from `rs-short/config.toml.sample`).
+
+## Configuration
+
+### Backend environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `RS_SHORT_URL` | `http://localhost:8080` | URL of the rs-short service |
+| `ROCKET_ADDRESS` | `0.0.0.0` | Address for Rocket to bind |
+| `ROCKET_PORT` | `8000` | Port for Rocket to bind |
+
+### Frontend environment variables (build-time)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PUBLIC_API_URL` | `http://localhost:8000` | Backend API base URL, baked into the static build |
+
+To set it at build time:
+
+```bash
+docker build --build-arg PUBLIC_API_URL=http://your-server:8000 -t qrcodegen-frontend ./site
+```
+
+### Docker Compose environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `RS_INSTANCE_HOSTNAME` | `https://s.rezel.net` | Public hostname for shortened URLs |
+| `PUBLIC_API_URL` | `http://localhost:8000` | Backend URL seen by browser clients |
+
+### rs-short (`rs-short/config.toml`)
+
+Copy the sample config and edit it:
+
+```bash
+cp rs-short/config.toml.sample rs-short/config.toml
+```
+
+Key settings:
+
+| Key | Description |
+|-----|-------------|
+| `listening_address` | Bind address (default `0.0.0.0:8080`) |
+| `database_path` | SQLite path or Postgres/MySQL connection string |
+| `instance_hostname` | Public domain for shortened URLs |
+| `cookie_key` | **Must be changed** — base64-encoded 64-byte secret key |
+| `phishing_password` | Admin password for flagging phishing links |
+| `captcha_difficulty` | `0` (easiest) to `5` (hardest) |
+| `theme` | `light`, `dark`, or `custom` |
+
+## API
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/qrcode/SVG/<content>/<level>` | Returns `{ "message": "<svg string>" }` |
+| `GET` | `/qrcode/JPG/<content>/<level>` | Returns `{ "message": "<base64 jpg>" }` |
+| `POST` | `/shorten` | Proxies to rs-short; body: `{ "url": "..." }`, returns `{ "short_url": "..." }` |
+
+**Error correction levels:**
+
+| Value | Level | Data recovery |
+|-------|-------|--------------|
+| `1` | Low | ~7% |
+| `2` | Medium | ~15% |
+| `3` | Quartile | ~25% |
+| `4` | High | ~30% |
+
+## Development
+
+Run the demo CLI (no server needed):
+
+```bash
+cargo run --example qrcodegen-demo   # prints QR codes to terminal and generates an SVG sample
+cargo run --example test1            # generates an SVG for "Hello, world!"
+```
+
+## License
+
+The core QR code generation library (`src/lib.rs`) is based on [Project Nayuki's QR Code generator](https://www.nayuki.io/page/qr-code-generator-library), released under the MIT License.
