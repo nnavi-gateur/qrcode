@@ -3,6 +3,12 @@ FROM rust:1.88-slim AS builder
 
 WORKDIR /app
 
+# Install build deps needed by reqwest (openssl-sys) and image crates
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # Cache dependencies before copying source
 COPY Cargo.toml Cargo.lock ./
 

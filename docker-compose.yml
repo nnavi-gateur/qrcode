@@ -1,4 +1,22 @@
 services:
+  rs-short:
+    build:
+      context: ./rs-short
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      # Persist the database and the generated config between restarts.
+      - rs-short-data:/run_dir/db
+      - rs-short-config:/run_dir
+    environment:
+      # Public hostname used in shortened URLs (no trailing slash).
+      RS_INSTANCE_HOSTNAME: ${RS_INSTANCE_HOSTNAME:-https://s.rezel.net}
+      # Optional: override auto-generated secrets.
+      # RS_COOKIE_KEY:        <base64-encoded 64-byte key>
+      # RS_PHISHING_PASSWORD: <random string>
+
   backend:
     build:
       context: .
@@ -6,6 +24,10 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
+    depends_on:
+      - rs-short
+    environment:
+      RS_SHORT_URL: http://rs-short:8080
 
   frontend:
     build:
@@ -20,3 +42,8 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+
+volumes:
+  rs-short-data:
+  rs-short-config:
+

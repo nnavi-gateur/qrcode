@@ -1,5 +1,7 @@
+
+
 body {
-    background-color: rgb(46, 49, 94);
+    background-color: rgb(56, 58, 88);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -42,18 +44,246 @@ body {
     gap: 10px;
 }   
 
+
+#id{
+    padding: 10px;
+    border-radius: 25px;
+    width: 300px;
+    max-width: 80vw;
+    border: none;
+    font-size: 1rem;
+}
 .box{
     padding-top: 10px;
     border-radius: 25px;
-    width: 45%;
-    height : 400px;
+    width:45%;
+    height : 600px;
     max-width: 500px;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    align-items: flex-start;
-    align-content: flex-start;
+    align-content: center;
     align-items: center;
     background: white;
     
+}
+
+#qr-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#qr-input{
+    padding: 10px;
+    width: 90%;
+    max-width: 80vw;
+    border : none;
+    border-bottom: 2px solid #666464;
+    font-size: 1rem;
+}
+
+#qr-input:focus{
+    outline: none;
+    border-radius: 10px;
+    border-bottom: 3px solid #121212;
+}
+#shorten-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+}
+
+#shorten-container {
+    display: flex;
+    width:90%;
+    align-items: center;
+    gap: 14px;
+    justify-content: center;
+}
+
+label{
+    position : relative;
+    width : 30px;
+    height : 30px;
+    border:1px solid #121212;
+    border-radius:3px ;
+    cursor: pointer;
+    display :inline-block;
+    background-color: rgb(43, 41, 41);
+}
+
+label::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 10px;
+    width: 7px;
+    height: 14px;
+    border-right : 2px solid white;
+    border-bottom : 2px solid white;
+    opacity: 0;
+    transition : all 0.3s ease;
+    transition-delay: 0.15s;
+    transform: rotate(45deg) scale(0);
+    
+}
+
+
+#shorten-checkbox:checked ~label{
+    background-color: #121212;
+    animation:checky 0.5s ease;
+}
+
+#shorten-checkbox:checked ~label::after{
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+}
+
+ #shorten-checkbox{
+    display: none;
+}
+
+@keyframes checky{
+    from{
+        transform: scale(1,1);
+    }
+    20%{
+        transform: scale(1.3,0.75);
+    }
+    80%{
+        transform: scale(0.75,1.3);
+    }
+    to {
+        transform : scale(1,1);
+    }
+}
+
+
+
+@keyframes checky2{
+    from{
+        transform: scale(1,1);
+    }
+    20%{
+        transform: scale(0.9,1.2);
+    }
+    80%{
+        transform: scale(3.5,0.85);
+    }
+    to {
+        transform : scale(1,1);
+    }
+}
+#submit{
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: rgb(43, 41, 41);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+
+
+#submit:hover{
+    background: linear-gradient(to right, #8d8c8c, #000000);
+}
+
+#submit:active{
+    background: linear-gradient(to right, #a14d4d, #000000);
+    transform: scale(0.90) ;
+}
+
+#format-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.format-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid rgb(43, 41, 41);
+    background-color: white;
+    color: rgb(43, 41, 41);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.8s ease;
+}
+
+.format-btn.active {
+    background-color: rgb(43, 41, 41);
+    color: white;
+    animation:checky2 0.4s ease;
+}
+
+.format-btn:hover {
+    border-color: #000;
+}
+
+
+#security-level {
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid rgb(43, 41, 41);
+    background-color: white;
+    color: rgb(43, 41, 41);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+select::picker-icon {
+    display:none;
+}
+
+
+
+#answer-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+@keyframes gradientSlide {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+#download-link{
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid rgb(43, 41, 41);
+    background-color: #121212;
+    color: rgb(235, 234, 234);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+
+    &:hover {
+        background: linear-gradient(to right, #8d8c8c, #000000);
+        color: white;
+        border:none;
+    }
+
+    &:focus {
+    background: linear-gradient(90deg, #a14d4d, #000000, #a14d4d, #000000);
+    background-size: 300% 100%;
+    animation: gradientSlide 3s linear infinite;
+    color: white;
+}
 }
