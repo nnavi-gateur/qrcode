@@ -1,0 +1,86 @@
+# rs-short configuration file
+# See also:
+#   - url_from_blacklist.list: Forbidden redirection names
+#   - url_to_softblacklist.list: Forbidden websites to redirect to (gentle warning)
+#   - url_to_blacklist.list: Forbidden websites to redirect to (ban / 403 forbidden)
+
+# Do not edit this manually unless you know what you are doing
+config_version = 3
+
+[general]
+
+# Address and port to listen on
+listening_address = "0.0.0.0:8080"
+
+# Database path
+# MySQL: mysql://user:password@address:port/database
+# PostgreSQL: postgres://user:password@address:port/database
+# SQLite: /path/to/db.sqlite (can be relative)
+# Warning: SQLite *will* trigger database locks.
+database_path = "./db/db.sqlite"
+
+# Your (sub)domain for rs-short
+# with https://, without the trailing slash
+instance_hostname = "s.example.com"
+
+# Your name (used in various places)
+hoster_name = "ExampleSoft"
+
+# Your website
+hoster_hostname = "example.com"
+
+# Your terms of service
+hoster_tos = "https://example.com/ToS"
+
+# A link to your contact details
+# Needed to fight phishing or general purposes
+# Can be https:, mailto: or whatever
+contact = "mailto:contact@example.com"
+
+# Theme (light, dark or custom). If you make new themes, please
+# contact us so we can add them to the main repository!
+# To add a custom theme, create a folder named "custom" in the
+# assets/themes/ folder and add your base.css file inside.
+theme = "light"
+
+# Key used to encrypt the cookie key.
+# Don't leave it empty!!
+# `openssl rand -base64 64 | tr -d '\n'`
+cookie_key = "CHANGE ME"
+
+# Find a compromise between accessibility and protection
+# against spambots. Don't forget that a good captcha **won't**
+# protect you against human spammers, and lots of them **are** human.
+# 0 = easiest / 5 = hardest
+captcha_difficulty = 3
+
+[phishing]
+
+# Writes every created link in console for easier monitoring
+# to fight phishing at the cost of users' privacy
+# Please use this feature with caution and consideration.
+verbose_console = false
+
+# Warns in console when there is an unusual activity on a link.
+# Needs to temporarily store user IPs and timestamps to RAM.
+verbose_suspicious = true
+
+# General verbose level.
+# info | notice | warn | crit
+verbose_level = "notice"
+
+# Per link, starting from how many clicks per suspicious_click_delay
+# a link is considered suspicious.
+# Default: Starting from 25 clicks in a timeframe of 12 hours.
+# Only if verbose_suspicious is true
+suspicious_click_count = 25
+
+# In hours.
+# See above.
+suspicious_click_timeframe = 12
+
+# Admin password to mark a link as phish link
+# example.com/<bad_link>/<secret>/phishing/<phishing_password> 
+# You must use characters that are safe to use in URLs
+# (let's say, alphanumeric characters). Should be longer than 16 characters.
+phishing_password = "CHANGE ME"

@@ -1,0 +1,13 @@
+.nav-item.lang {
+    display: none;
+}
+
+body {
+    margin-top: 64px;
+}
+
+@media (min-width: 801px) and (max-width: 1079px) {
+    body {
+        margin-top: 128px;
+    }
+}
