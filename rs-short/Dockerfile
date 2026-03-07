@@ -4,14 +4,9 @@ WORKDIR /run_dir
 
 COPY . .
 
-RUN cargo build --release --no-default-features --features postgres
+RUN cargo build --release
 
 FROM debian:bookworm-slim
-
-RUN apt update \
-    && apt -y install libpq5 \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /run_dir
 

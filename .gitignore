@@ -16,8 +16,8 @@ output.svg
 output.jpg
 output*.txt
 
-# Include rs-short folder and all its contents
-!rs-short/
-!rs-short/**
-# But exclude rs-short/target
+# Exclude rs-short build artifacts only — source is tracked
 rs-short/target/
+
+# Local environment overrides — never commit secrets
+.env
