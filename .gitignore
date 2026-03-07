@@ -16,5 +16,3 @@ output.svg
 output.jpg
 output*.txt
 
-# rs-short subproject (tracked separately)
-rs-short/
