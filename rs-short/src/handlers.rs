@@ -15,6 +15,17 @@ use crate::templates::{gen_random, gentpl_home, get_ip, get_lang, TplNotificatio
 use crate::DbPool;
 use crate::SuspiciousWatcher;
 
+// JSON request/response structures for API endpoint
+#[derive(Deserialize)]
+pub struct ApiShortenRequest {
+    pub url_to: String,
+}
+
+#[derive(Serialize)]
+pub struct ApiShortenResponse {
+    pub short_url: String,
+}
+
 // GET: flag a link as phishing
 // Can only be used by the server admin
 #[get("/{url_from}/phishing/{admin_key}")]
@@ -274,6 +285,125 @@ pub async fn shortcut_admin(
                 None,
             )))
     }
+}
+
+// POST: API endpoint for shortening URLs
+// This endpoint is for programmatic access and doesn't require captcha
+#[post("/api/shorten")]
+pub async fn api_shorten(
+    dbpool: web::Data<DbPool>,
+    body: web::Json<ApiShortenRequest>,
+) -> Result<HttpResponse, actix_web::Error> {
+    // Parse and validate the URL
+    let uri: actix_web::http::Uri = match body.url_to.parse() {
+        Ok(u) => u,
+        Err(_) => {
+            return Ok(HttpResponse::BadRequest()
+                .content_type(ContentType::json())
+                .json(serde_json::json!({"error": "Invalid URL format"})));
+        }
+    };
+
+    // Check scheme
+    match uri.scheme_str() {
+        Some(s) => {
+            if !crate::init::ALLOWED_PROTOCOLS.iter().any(|&p| p == s) {
+                return Ok(HttpResponse::BadRequest()
+                    .content_type(ContentType::json())
+                    .json(serde_json::json!({"error": "Unsupported protocol"})));
+            }
+        }
+        None => {
+            return Ok(HttpResponse::BadRequest()
+                .content_type(ContentType::json())
+                .json(serde_json::json!({"error": "No scheme in URL"})));
+        }
+    }
+
+    // Check host
+    if uri.host().is_none() {
+        return Ok(HttpResponse::BadRequest()
+            .content_type(ContentType::json())
+            .json(serde_json::json!({"error": "No host found in URL"})));
+    }
+
+    // Check URL length
+    if body.url_to.len() > 4096 {
+        return Ok(HttpResponse::BadRequest()
+            .content_type(ContentType::json())
+            .json(serde_json::json!({"error": "URL too long"})));
+    }
+
+    // Check for self-linking loop
+    if uri.host().unwrap().to_lowercase()
+        == CONFIG
+            .wait()
+            .general
+            .instance_hostname
+            .replace("http://", "")
+            .replace("https://", "")
+            .to_lowercase()
+    {
+        return Ok(HttpResponse::BadRequest()
+            .content_type(ContentType::json())
+            .json(serde_json::json!({"error": "Cannot shorten URLs to this instance"})));
+    }
+
+    // Check blocklists
+    if let Err(_) = POLICY
+        .wait()
+        .blocklist_check_to(&uri)
+    {
+        return Ok(HttpResponse::BadRequest()
+            .content_type(ContentType::json())
+            .json(serde_json::json!({"error": "URL is on blocklist"})));
+    }
+
+    // Generate a random short name
+    let new_url_from = BASE64_URL_SAFE_NO_PAD.encode(&gen_random(6));
+
+    // Get database connection
+    let mut conn = match dbpool.get() {
+        Ok(c) => c,
+        Err(_) => {
+            return Ok(HttpResponse::InternalServerError()
+                .content_type(ContentType::json())
+                .json(serde_json::json!({"error": "Database connection failed"})));
+        }
+    };
+
+    // Create the link in the database
+    let result = web::block(move || {
+        Link::insert_if_not_exists(&new_url_from, body.url_to.trim(), &mut conn)
+    })
+    .await;
+
+    let new_link = match result {
+        Ok(Ok(Some(v))) => v,
+        Ok(Ok(None)) => {
+            return Ok(HttpResponse::BadRequest()
+                .content_type(ContentType::json())
+                .json(serde_json::json!({"error": "Failed to create shortcut"})));
+        }
+        Ok(Err(_)) | Err(_) => {
+            return Ok(HttpResponse::InternalServerError()
+                .content_type(ContentType::json())
+                .json(serde_json::json!({"error": "Database error"})));
+        }
+    };
+
+    let linkinfo = LinkInfo::create_from(new_link);
+
+    // Return JSON response
+    Ok(HttpResponse::Ok()
+        .content_type(ContentType::json())
+        .json(ApiShortenResponse {
+            short_url: format!(
+                "{}/{}",
+                CONFIG.wait().general.instance_hostname,
+                linkinfo.url_from
+            ),
+        }))
 }
 
 // POST: Submit a new link

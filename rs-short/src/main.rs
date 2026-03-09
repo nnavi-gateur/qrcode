@@ -39,7 +39,7 @@ use chrono::Utc;
 use crate::error_handlers::default_handler;
 use crate::handlers::{
     index, post_link, shortcut, shortcut_admin, shortcut_admin_del, shortcut_admin_fallback,
-    shortcut_admin_flag,
+    shortcut_admin_flag, api_shorten,
 };
 use crate::init::{get_cookie_key, CONFIG};
 
@@ -139,6 +139,7 @@ async fn main() -> std::io::Result<()> {
             .service(shortcut_admin_flag)
             .service(shortcut_admin_del)
             .service(shortcut_admin_fallback)
+            .service(api_shorten)
             .service(post_link)
             .default_service(web::to(default_handler))
     })

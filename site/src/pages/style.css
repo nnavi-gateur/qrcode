@@ -173,8 +173,29 @@ label::after {
     20%{
         transform: scale(0.9,1.2);
     }
-    80%{
+    30%{
         transform: scale(3.5,0.85);
+    }
+    35%{
+        transform: scale(0.9,1.2);
+    }
+    40%{
+        transform: scale(2.5,0.85);
+    }
+    45%{
+        transform: scale(0.9,1.2);
+    }
+    50%{
+        transform: scale(2,0.85);
+    }
+    55%{
+        transform: scale(0.9,1.2);
+    }
+    60%{
+        transform: scale(1.6,0.85);
+    }
+    80%{
+        transform: scale(0.9,1.2);
     }
     to {
         transform : scale(1,1);
@@ -221,7 +242,7 @@ label::after {
 .format-btn.active {
     background-color: rgb(43, 41, 41);
     color: white;
-    animation:checky2 0.4s ease;
+    animation:checky2 1.4s ease;
 }
 
 .format-btn:hover {

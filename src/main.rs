@@ -98,6 +98,13 @@ async fn shorten(
     Ok(Json(ShortenResponse { short_url }))
 }
 
+/// OPTIONS /shorten
+/// Handles CORS preflight requests
+#[options("/shorten")]
+fn shorten_options() -> &'static str {
+    ""
+}
+
 #[launch]
 fn rocket() -> _ {
     let allowed_origins = AllowedOrigins::all();
@@ -125,5 +132,5 @@ fn rocket() -> _ {
         .manage(AppConfig {
             rs_short_url,
         })
-        .mount("/", routes![qr_svg, qr_jpg, shorten])
+        .mount("/", routes![qr_svg, qr_jpg, shorten, shorten_options])
 }
