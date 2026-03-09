@@ -21,7 +21,7 @@ RUN chmod 755 /run_dir
 RUN adduser --disabled-password --gecos "" --no-create-home "unprivileged"
 
 # Allow unprivileged user to write to /run_dir for database access
-RUN chown -R unprivileged:unprivileged /run_dir
+RUN chown -R unprivileged:unprivileged /run_dir && chmod -R u+w /run_dir
 
 USER unprivileged
 
