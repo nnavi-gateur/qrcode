@@ -19,9 +19,6 @@ COPY --from=builder /run_dir/target/release/rs-short /run_dir/lists.toml /run_di
 
 COPY --from=builder /run_dir/assets ./assets
 
-# Embed a default config (critical values are overridden by env vars at runtime)
-COPY config.toml ./config.toml
-
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
