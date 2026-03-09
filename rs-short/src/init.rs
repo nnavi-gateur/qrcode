@@ -204,7 +204,20 @@ impl Config {
         conffile
             .read_to_string(&mut confstr)
             .expect("Couldn't read config to string");
-        toml::from_str(&confstr).unwrap()
+        let mut config: Config = toml::from_str(&confstr).unwrap();
+
+        // Allow env vars to override config.toml values
+        if let Ok(hostname) = std::env::var("RS_INSTANCE_HOSTNAME") {
+            config.general.instance_hostname = hostname;
+        }
+        if let Ok(cookie_key) = std::env::var("RS_COOKIE_KEY") {
+            config.general.cookie_key = cookie_key;
+        }
+        if let Ok(phishing_password) = std::env::var("RS_PHISHING_PASSWORD") {
+            config.phishing.phishing_password = phishing_password;
+        }
+
+        config
     }
 
     pub fn check(&self) {
