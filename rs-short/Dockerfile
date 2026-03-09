@@ -10,8 +10,8 @@ FROM debian:bookworm-slim
 
 WORKDIR /run_dir
 
-# Install gosu for clean privilege dropping in the entrypoint
-RUN apt-get update && apt-get install -y --no-install-recommends gosu \
+# Install gosu (privilege dropping) and openssl (secret generation)
+RUN apt-get update && apt-get install -y --no-install-recommends gosu openssl \
     && rm -rf /var/lib/apt/lists/*
 
 # config.toml will be missing and needs to be mounted
@@ -19,11 +19,17 @@ COPY --from=builder /run_dir/target/release/rs-short /run_dir/lists.toml /run_di
 
 COPY --from=builder /run_dir/assets ./assets
 
+# Embed a default config (critical values are overridden by env vars at runtime)
+COPY config.toml ./config.toml
+
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
 RUN adduser --disabled-password --gecos "" --no-create-home "unprivileged"
 
-# Entrypoint fixes volume permissions at runtime then drops to unprivileged
+# Pre-create the db directory with correct ownership
+RUN mkdir -p /run_dir/db && chown -R unprivileged:unprivileged /run_dir
+
+# Entrypoint fixes db volume permissions and generates secrets at runtime
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/run_dir/rs-short"]

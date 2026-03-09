@@ -1,5 +1,19 @@
 services:
+  # One-shot container that fixes ownership of the db volume before rs-short starts.
+  # Docker initializes named volumes as root-owned when the target directory doesn't
+  # exist in the image, so we need to fix it at runtime.
+  rs-short-init:
+    image: debian:bookworm-slim
+    user: root
+    volumes:
+      - rs-short-data:/run_dir/db
+    command: ["chown", "-R", "1000:1000", "/run_dir/db"]
+    restart: "no"
+
   rs-short:
+    depends_on:
+      rs-short-init:
+        condition: service_completed_successfully
     # Pre-built image published to GHCR on every push to main.
     # Use `docker compose up --build` to build locally instead.
     image: ghcr.io/nnavi-gateur/qrcode-rs-short:latest
@@ -10,9 +24,8 @@ services:
       - "8080:8080"
     restart: unless-stopped
     volumes:
-      # Persist the database and the generated config between restarts.
+      # Persist only the SQLite database between restarts.
       - rs-short-data:/run_dir/db
-      - rs-short-config:/run_dir
     environment:
       # Public hostname used in shortened URLs (no trailing slash).
       RS_INSTANCE_HOSTNAME: ${RS_INSTANCE_HOSTNAME:-https://s.rezel.net}
@@ -34,6 +47,7 @@ services:
       - rs-short
     environment:
       RS_SHORT_URL: ${RS_SHORT_URL:-http://rs-short:8080}
+      RS_INSTANCE_HOSTNAME: ${RS_INSTANCE_HOSTNAME:-https://s.rezel.net}
 
   frontend:
     # Pre-built image published to GHCR on every push to main.
@@ -55,5 +69,4 @@ services:
 
 volumes:
   rs-short-data:
-  rs-short-config:
 

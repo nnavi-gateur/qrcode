@@ -44,6 +44,7 @@ struct ShortenResponse {
 /// Config read from environment variables by Rocket.
 struct AppConfig {
     rs_short_url: String,
+    rs_instance_hostname: String,
 }
 
 /// POST /shorten
@@ -56,7 +57,10 @@ async fn shorten(
 ) -> Result<Json<ShortenResponse>, rocket::response::status::Custom<String>> {
     use rocket::http::Status;
 
-    let client = reqwest::Client::new();
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(5))
+        .build()
+        .unwrap_or_default();
 
     let payload = serde_json::json!({
         "url_to": body.url,
@@ -90,10 +94,11 @@ async fn shorten(
         )
     })?;
 
-    let short_url = data["short_url"]
-        .as_str()
-        .unwrap_or("")
-        .to_string();
+    // Extract just the slug from whatever URL rs-short returned, then
+    // rebuild the final URL using the configured public hostname.
+    let raw = data["short_url"].as_str().unwrap_or("");
+    let slug = raw.rsplit('/').next().unwrap_or("");
+    let short_url = format!("{}/{}", cfg.rs_instance_hostname, slug);
 
     Ok(Json(ShortenResponse { short_url }))
 }
@@ -126,11 +131,14 @@ fn rocket() -> _ {
 
     let rs_short_url = std::env::var("RS_SHORT_URL")
         .unwrap_or_else(|_| "http://localhost:8080".to_string());
+    let rs_instance_hostname = std::env::var("RS_INSTANCE_HOSTNAME")
+        .unwrap_or_else(|_| "https://s.rezel.net".to_string());
 
     rocket::build()
         .attach(cors)
         .manage(AppConfig {
             rs_short_url,
+            rs_instance_hostname,
         })
         .mount("/", routes![qr_svg, qr_jpg, shorten, shorten_options])
 }

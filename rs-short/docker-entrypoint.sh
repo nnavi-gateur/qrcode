@@ -1,12 +1,21 @@
 #!/bin/sh
 set -e
 
-# Fix ownership/permissions on the mounted volume at runtime.
-# This is necessary because named Docker volumes retain their original
-# permissions from when they were first created, overriding Dockerfile
-# RUN chown/chmod instructions.
-chown -R unprivileged:unprivileged /run_dir
-chmod -R u+w /run_dir
+# Ensure the db directory exists and is writable by the unprivileged user.
+# Named Docker volumes retain permissions from their first creation, so we
+# fix them here at every startup.
+mkdir -p /run_dir/db
+chown unprivileged:unprivileged /run_dir/db
+chmod u+rwx /run_dir/db
+
+# Auto-generate secrets if not provided via environment variables.
+if [ -z "$RS_COOKIE_KEY" ]; then
+    export RS_COOKIE_KEY=$(openssl rand -base64 64 | tr -d '\n')
+fi
+
+if [ -z "$RS_PHISHING_PASSWORD" ]; then
+    export RS_PHISHING_PASSWORD=$(openssl rand -hex 16)
+fi
 
 # Drop privileges and exec the application.
 exec gosu unprivileged "$@"
