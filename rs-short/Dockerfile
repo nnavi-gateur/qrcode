@@ -20,7 +20,13 @@ COPY --from=builder /run_dir/target/release/rs-short /run_dir/lists.toml /run_di
 
 COPY --from=builder /run_dir/assets ./assets
 
+# Ensure /run_dir has proper permissions for the app to write databases
+RUN chmod 755 /run_dir
+
 RUN adduser --disabled-password --gecos "" --no-create-home "unprivileged"
+
+# Allow unprivileged user to write to /run_dir for database access
+RUN chown -R unprivileged:unprivileged /run_dir
 
 USER unprivileged
 

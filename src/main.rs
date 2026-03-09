@@ -100,7 +100,22 @@ async fn shorten(
 
 #[launch]
 fn rocket() -> _ {
-    let cors = CorsOptions::default().to_cors().expect("CORS error");
+    let allowed_origins = AllowedOrigins::all();
+    
+    let cors = CorsOptions {
+        allowed_origins,
+        allowed_methods: vec![
+            rocket::http::Method::Get,
+            rocket::http::Method::Post,
+            rocket::http::Method::Options,
+        ]
+        .into_iter()
+        .map(From::from)
+        .collect(),
+        ..Default::default()
+    }
+    .to_cors()
+    .expect("CORS error");
 
     let rs_short_url = std::env::var("RS_SHORT_URL")
         .unwrap_or_else(|_| "http://localhost:8080".to_string());
