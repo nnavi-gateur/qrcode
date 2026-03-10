@@ -75,13 +75,13 @@ if (submit && answer) {
 
       let data: any;
       if (currentFormat === "jpg") {
-        const reponse = await fetch(`${apiBase}/qrcode/JPG/${encodedContent}/${securityEl.selectedIndex}`);
+        const reponse = await fetch(`${apiBase}/qrcode/JPG?content=${encodedContent}&level=${securityEl.selectedIndex}`);
         data = await reponse.json();
         answer.src = "data:image/jpeg;base64," + data.message;
         downloadLink.href = "data:image/jpeg;base64," + data.message;
         downloadLink.style.display = "block";
       } else {
-        const reponse = await fetch(`${apiBase}/qrcode/SVG/${encodedContent}/${securityEl.selectedIndex}`);
+        const reponse = await fetch(`${apiBase}/qrcode/SVG?content=${encodedContent}&level=${securityEl.selectedIndex}`);
         data = await reponse.json();
         answer.src = "data:image/svg+xml;base64," + btoa(data.message);
         downloadLink.href = "data:image/svg+xml;base64," + btoa(data.message);

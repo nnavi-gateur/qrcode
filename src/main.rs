@@ -12,14 +12,14 @@ struct Response {
     message: String,
 }
 
-#[get("/qrcode/SVG/<content>/<level>")]
+#[get("/qrcode/SVG?<content>&<level>")]
 fn qr_svg(content: String, level: i32) -> Json<Response> {
     println!("Received request for content: {}, level: {}", content, level);
     Json(Response {
         message: create_svg(&create_qr_code(&content, level)).to_string(),
     })
 }
-#[get("/qrcode/JPG/<content>/<level>")]
+#[get("/qrcode/JPG?<content>&<level>")]
 fn qr_jpg(content: String, level: i32) -> Json<Response> {
     println!("Received request for content: {}, level: {}", content, level);
     Json(Response {
