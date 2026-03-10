@@ -20,9 +20,9 @@ import rezel_logo from '../assets/rezel_blanc.svg';
           <button id="format-svg" class="format-btn">SVG</button>
         </div>
       <select id="security-level">
-                <option disabled >Security Level</option>
-                <option value="low">Low</option>
-                <option value="medium" selected>Medium</option>
+                <option disabled >-- Select a precision level --</option>
+                <option value="low" selected>Low</option>
+                <option value="medium" >Medium</option>
                 <option value="quartile">Quartile</option>
                 <option value="high">High</option>
       </select>
@@ -35,7 +35,9 @@ import rezel_logo from '../assets/rezel_blanc.svg';
       <p id="sec-select" style="display:none;"> Select a security level before generating the QR code. </p>
       </div>
       <div class ="box" id ="answer-box">
-
+        <div  id="loading"style="display : none;">
+        <div class="loader"></div> 
+        <p>Loading QR code wait a moment</p></div>
         <img id = "answer"> </img>
          <a id = "download-link" download tabindex="0" style="display: none;"> Download QR Code</a>
 

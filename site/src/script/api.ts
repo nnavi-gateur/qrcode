@@ -6,6 +6,7 @@ const shortenCheckbox = document.getElementById("shorten-checkbox") as HTMLInput
 const formatJpgBtn = document.getElementById("format-jpg") as HTMLButtonElement;
 const formatSvgBtn = document.getElementById("format-svg") as HTMLButtonElement;
 const sec_select=document.getElementById("sec-select") as HTMLParagraphElement;
+const waiting_screen=document.getElementById("loading") as HTMLDivElement;
 
 let currentFormat = "jpg";
 
@@ -44,11 +45,19 @@ if (formatSvgBtn) {
 if (submit && answer) {
   submit.addEventListener("click", async function() {
     try {
+
       const apiBase = "/api";
       let content = (document.getElementById("qr-input") as HTMLInputElement).value;
+      const securityEl = document.getElementById('security-level') as HTMLSelectElement;
+      if (securityEl.selectedIndex == 0){
+          sec_select.style.display = "block";
+          setTimeout (() => {sec_select.style.display = "none";}, 4000);
+          return;
+      }
+      waiting_screen.style.display = "flex";
 
       // If the "Shorten URL" checkbox is checked, shorten the URL first.
-      if (shortenCheckbox && shortenCheckbox.checked) {
+      if (shortenCheckbox && shortenCheckbox.checked && content.trim() !== "" && (content.startsWith("http://") || content.startsWith("https://"))) {
         const shortenResp = await fetch(`${apiBase}/shorten`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -66,25 +75,21 @@ if (submit && answer) {
       }
 
       const encodedContent = encodeURIComponent(content);
-      const securityEl = document.getElementById('security-level') as HTMLSelectElement;
-      if (securityEl.selectedIndex == 0){
-          sec_select.style.display = "block";
-          setTimeout (() => {sec_select.style.display = "none";}, 4000);
-          return;
-      }
-
+      
       let data: any;
       if (currentFormat === "jpg") {
         const reponse = await fetch(`${apiBase}/qrcode/JPG?content=${encodedContent}&level=${securityEl.selectedIndex}`);
         data = await reponse.json();
         answer.src = "data:image/jpeg;base64," + data.message;
         downloadLink.href = "data:image/jpeg;base64," + data.message;
+        waiting_screen.style.display = "none";
         downloadLink.style.display = "block";
       } else {
         const reponse = await fetch(`${apiBase}/qrcode/SVG?content=${encodedContent}&level=${securityEl.selectedIndex}`);
         data = await reponse.json();
         answer.src = "data:image/svg+xml;base64," + btoa(data.message);
         downloadLink.href = "data:image/svg+xml;base64," + btoa(data.message);
+        waiting_screen.style.display = "none";
         downloadLink.style.display = "block";
       }
 
