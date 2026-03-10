@@ -28,7 +28,7 @@ services:
       - rs-short-data:/run_dir/db
     environment:
       # Public hostname used in shortened URLs (no trailing slash).
-      RS_INSTANCE_HOSTNAME: ${RS_INSTANCE_HOSTNAME:-https://s.rezel.net}
+      RS_INSTANCE_HOSTNAME: ${RS_INSTANCE_HOSTNAME:-https://qr.rezel.net}
       # Optional: override auto-generated secrets.
       # RS_COOKIE_KEY:        <base64-encoded 64-byte key>
       # RS_PHISHING_PASSWORD: <random string>
@@ -45,7 +45,6 @@ services:
       - rs-short
     environment:
       RS_SHORT_URL: ${RS_SHORT_URL:-http://rs-short:8080}
-      RS_INSTANCE_HOSTNAME: ${RS_INSTANCE_HOSTNAME:-https://s.rezel.net}
 
   frontend:
     # Pre-built image published to GHCR on every push to main.

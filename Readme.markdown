@@ -100,7 +100,7 @@ docker build --build-arg PUBLIC_API_URL=http://your-server:8000 -t qrcodegen-fro
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `RS_INSTANCE_HOSTNAME` | `https://s.rezel.net` | Public hostname for shortened URLs |
+| `RS_INSTANCE_HOSTNAME` | `https://qr.rezel.net` | Public hostname for shortened URLs |
 | `PUBLIC_API_URL` | `http://localhost:8000` | Backend URL seen by browser clients |
 
 ### rs-short (`rs-short/config.toml`)
