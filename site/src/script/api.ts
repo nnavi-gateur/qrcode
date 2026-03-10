@@ -44,7 +44,7 @@ if (formatSvgBtn) {
 if (submit && answer) {
   submit.addEventListener("click", async function() {
     try {
-      const apiBase = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8000";
+      const apiBase = "/api";
       let content = (document.getElementById("qr-input") as HTMLInputElement).value;
 
       // If the "Shorten URL" checkbox is checked, shorten the URL first.

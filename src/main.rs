@@ -140,5 +140,5 @@ fn rocket() -> _ {
             rs_short_url,
             rs_instance_hostname,
         })
-        .mount("/", routes![qr_svg, qr_jpg, shorten, shorten_options])
+        .mount("/api", routes![qr_svg, qr_jpg, shorten, shorten_options])
 }
