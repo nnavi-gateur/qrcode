@@ -22,7 +22,7 @@ config_version = 3
 [general]
 listening_address = "0.0.0.0:8080"
 database_path = "./db/db.sqlite"
-instance_hostname = "${RS_INSTANCE_HOSTNAME:-https://qr.rezel.net}"
+instance_hostname = "${RS_INSTANCE_HOSTNAME:-https://qr.rezel.net/s}"
 hoster_name = "Rezel"
 hoster_hostname = "rezel.net"
 hoster_tos = "https://rezel.net"
