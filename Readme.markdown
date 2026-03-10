@@ -17,7 +17,7 @@ The project is composed of three services:
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
-
+ges (backend, frontend, rs-short) are published to the GitHub Container Registry on every push to `main`, so you **do not need the source code** on y
 ### Deploy on a VM (copy-to-server)
 
 All three images (backend, frontend, rs-short) are published to the GitHub Container Registry on every push to `main`, so you **do not need the source code** on your server.

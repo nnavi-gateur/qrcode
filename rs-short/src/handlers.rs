@@ -395,14 +395,11 @@ pub async fn api_shorten(
     let linkinfo = LinkInfo::create_from(new_link);
 
     // Return JSON response
+    // linkinfo.url_from already contains the full URL (hostname + slug)
     Ok(HttpResponse::Ok()
         .content_type(ContentType::json())
         .json(ApiShortenResponse {
-            short_url: format!(
-                "{}/{}",
-                CONFIG.wait().general.instance_hostname,
-                linkinfo.url_from
-            ),
+            short_url: linkinfo.url_from,
         }))
 }
 
